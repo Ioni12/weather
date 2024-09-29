@@ -22,8 +22,8 @@ export default function Weather(){
             }
             const data = await res.json();
             setWeather(data);
-        }catch(e){
-            setError(e.message);
+        }catch(error){
+            setError(error.message);
         }finally{
             setLoading(false);
         }
@@ -31,45 +31,38 @@ export default function Weather(){
 
     return (
         <>
-            <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Weather App</h1>
-      <div className="flex mb-4">
-        <Input
-          type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          placeholder="Enter city name"
-          className="flex-grow mr-2"
-        />
-        <Button onClick={fetchWeather} disabled={loading}>
-          <Search size={20} />
-        </Button>
-      </div>
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      {weather && (
-        <Card>
-          <CardHeader>
-            <CardTitle>{weather.name}, {weather.sys.country}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center mb-2">
-              <Cloud className="mr-2" />
-              <span>{weather.weather[0].description}</span>
+            <div className="bg-slate-800 max-w-md mx-auto mt-20 p-6 rounded-lg shadow-md">
+                <h1 className="text-2xl font-bold mb-4 text-gray-300">Weather app</h1>
+                <div className="flex mb-4">
+                    <Input type="text" value={city} onChange={(e) => {setCity(e.target.value)}} placeholder="enter city name" className="flex-grow mr-2 font-bold"/>
+                    <Button onClick={fetchWeather} disabled={loading} className="bg-slate-600"><Search size={20} color="white"/></Button>
+                </div>
+                {loading && <p>Loading ...</p>}
+                {error && <p className="text-red-600">{error}</p>}
+                {weather && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>{weather.name}, {weather.sys.country}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex items-center mb-2 ml-auto">
+                                <Cloud className="ml-auto mr-2"/>
+                                <span className="mr-auto">{weather.weather[0].description}</span>
+                            </div>
+                            <p className="text-3xl font-bold mb-2">{Math.round(weather.main.temp)}°C</p>
+                            <div className="flex items-center mb-2 ">
+                                <Droplet className="mr-2 ml-auto"/>
+                                <span className="mr-auto">Humidity: {weather.main.humidity}%</span>
+                            </div>
+                            <div className="flex items-center">
+                                <Wind className="mr-2 ml-auto"/>
+                                <span className="mr-auto">Wind: {weather.wind.speed} m/s</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
-            <p className="text-3xl font-bold mb-2">{Math.round(weather.main.temp)}°C</p>
-            <div className="flex items-center mb-2">
-              <Droplet className="mr-2" />
-              <span>Humidity: {weather.main.humidity}%</span>
-            </div>
-            <div className="flex items-center">
-              <Wind className="mr-2" />
-              <span>Wind: {weather.wind.speed} m/s</span>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+     
         </>
     )
 }
